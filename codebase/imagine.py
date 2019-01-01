@@ -166,7 +166,6 @@ def record_walk(walk_data, frame_rate):
                                    save=True, fileNameOut=file_name)
 
 
-
 def main():
 
     if 'box' in sys.argv:
@@ -186,20 +185,20 @@ def main():
         firefly = spatial.Point(start, 10)
         # firefly.show(cage)
 
-        # Show the animation?
-        isVisual = True 
+        if 'random_walk' in sys.argv:
+            # Show the animation?
+            isVisual = False
 
-        # Simulate the point taking a random walk through the space
-        # history0, steps0 = random_walk(firefly, 50, cage, verbose=False, show=isVisual,
-        #                              save=False, frame_rate=20)
+            # Simulate the point taking a random walk through the space
+            # history0, steps0 = random_walk(firefly, 50, cage, verbose=False, show=isVisual,
+            #                              save=False, frame_rate=20)
+            nsteps = int(input('How many steps for random walk?'))
+            history, steps = random_walk(firefly, nsteps, cage, verbose=False, show=isVisual,
+                                         save=False, frame_rate=20)
 
-        history, steps = random_walk(firefly, 500, cage, verbose=False, show=isVisual,
-                                     save=False, frame_rate=20)
-
-        # Evaluate the random walk
-        random_walk_eval(history, steps)
-        # TODO: Fix the function to record walk as a GIF
-        # record_walk(history,20)
+            # Evaluate the random walk
+            random_walk_eval(history, steps)
+            record_walk(history, 20)
 
 
 if __name__ == '__main__':
