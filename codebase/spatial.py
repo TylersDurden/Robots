@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 class Point:
     xloc = 0
     yloc = 0
-    value = 2
+    value = 1
 
     # DIRECTIONAL_VALUED_INDICES
     # [[1,2,3],
@@ -75,7 +75,7 @@ class Point:
             return 0
         else:
             # If moving, erase previous block
-            state[self.xloc,self.yloc] -= 1
+            state[self.xloc,self.yloc] = 0
             choice = self.directions[direction]
             newpos = self.cardinal[choice]
             next_pos = self.movement_calc(newpos)

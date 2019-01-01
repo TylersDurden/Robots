@@ -152,10 +152,23 @@ def random_walk(point, nsteps, space, verbose, show, save, frame_rate):
     return data, steps
 
 
-def random_walk_eval(history, steps):
+def random_walk_eval(history, start, steps):
     print str(len(history)) + " Steps Taken."
     print "Started At " + str(steps.pop(0))
     print "Ended At " + str(steps.pop())
+    
+    final = history.pop()
+    tiles_eaten = start.sum() - final.sum()
+    total_tiles = final.shape[0]*final.shape[1]
+
+    print str(tiles_eaten)+' Tiles Eaten ['+str(100*tiles_eaten/total_tiles)+"%]"
+
+    f, ax = plt.subplots(1, 2)
+    ax[0].imshow(start, 'gray_r')
+    ax[0].set_title('Start')
+    ax[1].imshow(final, 'gray_r')
+    ax[1].set_title('Final')
+    plt.show()
 
 
 def record_walk(walk_data, frame_rate):
@@ -176,13 +189,15 @@ def main():
         # Example of scaling the box 30x
         cage = box.scale_box(10, True)
 
+        initial_state = cage.copy()
+
         # Put a point in the center of big box
         center_x = int(cage.shape[0]/2)
         center_y = int(cage.shape[1]/2)
         start = [center_x, center_y]
 
         # Make the point 'aware'
-        firefly = spatial.Point(start, 10)
+        firefly = spatial.Point(start, 3)
         # firefly.show(cage)
 
         if 'random_walk' in sys.argv:
@@ -192,13 +207,15 @@ def main():
             # Simulate the point taking a random walk through the space
             # history0, steps0 = random_walk(firefly, 50, cage, verbose=False, show=isVisual,
             #                              save=False, frame_rate=20)
-            nsteps = int(input('How many steps for random walk?'))
+            nsteps = int(input('How many steps for random walk?: '))
+            if '-v' in sys.argv:
+                isVisual = True
             history, steps = random_walk(firefly, nsteps, cage, verbose=False, show=isVisual,
                                          save=False, frame_rate=20)
 
             # Evaluate the random walk
-            random_walk_eval(history, steps)
-            record_walk(history, 20)
+            random_walk_eval(history, initial_state, steps)
+            # record_walk(history, 20)
 
 
 if __name__ == '__main__':
