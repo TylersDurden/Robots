@@ -187,7 +187,7 @@ def main():
         # firefly.show(cage)
 
         # Show the animation?
-        isVisual = False
+        isVisual = True 
 
         # Simulate the point taking a random walk through the space
         # history0, steps0 = random_walk(firefly, 50, cage, verbose=False, show=isVisual,
@@ -198,7 +198,8 @@ def main():
 
         # Evaluate the random walk
         random_walk_eval(history, steps)
-        record_walk(history,20)
+        # TODO: Fix the function to record walk as a GIF
+        # record_walk(history,20)
 
 
 if __name__ == '__main__':
