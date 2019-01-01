@@ -153,9 +153,17 @@ def random_walk(point, nsteps, space, verbose, show, save, frame_rate):
 
 
 def random_walk_eval(history, start, steps):
+    first = steps.pop(0)
+    last = steps.pop()
+    dx = last[0] - first[0]
+    dy = last[1] - first[1]
+
+    distance = np.sqrt((dx*dx)+(dy*dy))
+
     print str(len(history)) + " Steps Taken."
-    print "Started At " + str(steps.pop(0))
-    print "Ended At " + str(steps.pop())
+    print "Started At " + str(first)
+    print "Ended At " + str(last)
+    print "Net Distance Travelled: "+str(distance)
     
     final = history.pop()
     tiles_eaten = start.sum() - final.sum()
@@ -187,7 +195,7 @@ def main():
         # box.show()
 
         # Example of scaling the box 30x
-        cage = box.scale_box(10, True)
+        cage = box.scale_box(15, True)
 
         initial_state = cage.copy()
 
