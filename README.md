@@ -4,6 +4,10 @@ and watch a random walk, using N Steps (you get to choose how many).
 
 ![Example Output](https://raw.githubusercontent.com/TylersDurden/Robots/master/RandomWalkEx.png)
 
+A video showing what a random walk looks like:
+[Random Walking](https://raw.githubusercontent.com/TylersDurden/Robots/master/random_walking.mp4)
+
+
 # Diffusion-Limited Aggregation
 When many points are left to walk randomly, and are told that if they hit another point they can stop,
 interesting crystalline structures tend to grow. Using ``python dla2.py -chk``, you can watch this 
