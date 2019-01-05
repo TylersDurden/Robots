@@ -24,3 +24,10 @@ A second example with a different initial condition [5500 Points]:
 A video example of the process occuring [2200 Points]: 
 
 ![dlaExVid](https://raw.githubusercontent.com/TylersDurden/Robots/master/dlaEx.mp4)
+
+In dla2.py, particles are added on-screen sequentially (though their movements are precomputed 
+offscreen for improved performance), greatly adding to the length of frames in the simulation (each particle added is captured in a frame, i.e. 5000 particles means 5000 frames). 
+
+In this such DLA simulation, many particles can be initialized at once.The python program dla3.py
+will include this new scheme. 
+  
