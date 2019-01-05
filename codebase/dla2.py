@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt, matplotlib.animation as animation
 import numpy as np, utility, sys
 
 
@@ -134,7 +133,7 @@ def main():
     else:
         # Put a box in the center
         state[center_x - center_mass_size:center_x + center_mass_size,
-        center_y - center_mass_size:center_y + center_mass_size] = 1
+              center_y - center_mass_size:center_y + center_mass_size] = 1
 
     data = []
 
@@ -145,7 +144,6 @@ def main():
         # print "Starting from "+str(start)
 
         frames = feed_steps_to_state(start, state, steps)
-        # data = splice_timeline(frames, data)
         state = frames.pop()
         data.append(np.array(state))
 
