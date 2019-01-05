@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt, matplotlib.animation as animation
-import numpy as np
+import numpy as np, utility
 
 
 def create_start(padding, state, verbose):
@@ -20,8 +20,7 @@ def create_start(padding, state, verbose):
 
 
 def feed_steps_to_state(start, state, steps):
-    history = list()
-    visual = []
+    history = []
     for step in steps:
         x = start[0]
         y = start[1]
@@ -38,14 +37,23 @@ def feed_steps_to_state(start, state, steps):
 
         # If there's something already there,
         # leave the particle before moving on
-        if step != 5 and state[directions[step][0],directions[step][1]] == 1:
+        try:
+            next_step = state[directions[step][0],directions[step][1]]
+        except IndexError:
+            # Out of Bounds!
+            break
+        if step != 5 and next_step == 1:
             state[x, y] = 1
             history.append(state)
             break
         elif step != 5:
             start = directions[step]
-            state[start[0],start[1]] = 1
             history.append(state)
+            if len(history) == len(steps):
+                state[start[0], start[1]] = 0
+            else:
+                state[start[0], start[1]] = 1
+
     return history
 
 
@@ -66,7 +74,7 @@ def splice_timeline(series1, series2):
 
 def main():
     n_steps = 500
-    n_particles = 500
+    n_particles = 1000
     dimensions = [250, 250]
     center_mass_size = 3
 
@@ -87,15 +95,14 @@ def main():
         start = create_start(10, np.zeros((250, 250)), False)
         steps = np.random.randint(1, 9, n_steps)
 
-        print "Starting from "+str(start)
+        # print "Starting from "+str(start)
 
         frames = feed_steps_to_state(start, state, steps)
         # data = splice_timeline(frames, data)
         state = frames.pop()
-        data.append([plt.imshow(state, 'gray_r')])
+        data.append(np.array(state))
 
-    a = animation.ArtistAnimation(plt.figure(), data, interval=50,blit=True,repeat_delay=500)
-    plt.show()
+    utility.ImageProcessing.render(data, False, 20, True, 'DLA_Universe.mp4')
 
 
 if __name__ == '__main__':
