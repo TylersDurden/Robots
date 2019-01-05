@@ -19,7 +19,8 @@ def create_start(padding, state, verbose):
 
 
 def feed_steps_to_state(start, state, steps):
-    history = []
+    #history = []
+    n = 0
     for step in steps:
         try:
             x = start[0]
@@ -44,17 +45,17 @@ def feed_steps_to_state(start, state, steps):
             break
         if step != 5 and next_step == 1:
             state[x, y] = 1
-            history.append(state)
+            #history.append(state)
             break
         elif step != 5:
             start = directions[step]
-            history.append(state)
-            if len(history) == len(steps):
+            #history.append(state)
+            if n == len(steps):
                 state[start[0], start[1]] = 0
             else:
                 state[start[0], start[1]] = 1
-
-    return history
+        n += 1
+    return state
 
 
 def splice_timeline(series1, series2):
@@ -147,14 +148,15 @@ def draw_square_lattice(state):
 
 def main():
     n_steps = 150
-    n_particles = 15500
+    n_particles = 5500
     dimensions = [240, 240]
-    checker = False
     animated = False
+    if '-show' in sys.argv:
+        animated = True
     if '-cm' not in sys.argv:
         center_mass_size = 5
     else:
-        center_mass_size = int(sys.argv[2])
+        center_mass_size = int(input('Enter Box size: '))
 
     # Numbering scheme for direction keys
     # [[1,2,3],
@@ -164,11 +166,10 @@ def main():
     center_x = int(state.shape[0]) / 2
     center_y = int(state.shape[1]) / 2
 
-    if checker or '-cm' in sys.argv:
-
+    if '-chk' in sys.argv:
         state = draw_square_lattice(state)
 
-    elif not checker:
+    else:
         # Put a box in the center
         state[center_x - center_mass_size:center_x + center_mass_size,
               center_y - center_mass_size:center_y + center_mass_size] = 1
@@ -181,19 +182,19 @@ def main():
 
         # print "Starting from "+str(start)
 
-        frames = feed_steps_to_state(start, state, steps)
-        state = frames.pop()
+        state = feed_steps_to_state(start, state, steps)
         data.append(np.array(state))
 
     print "Simulation completed."
     if animated:
         print "Rendering " + str(len(data)) + " Frames"
-        utility.ImageProcessing.render(data, False, 5, False, '')
+        utility.ImageProcessing.render(data, False, 1, False, '')
     else:
         import matplotlib.pyplot as plt
         plt.title('Final State [Generation '+str(n_particles)+']')
         plt.imshow(state, 'gray_r')
         plt.show()
+
 
 if __name__ == '__main__':
     main()
