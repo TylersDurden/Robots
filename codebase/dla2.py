@@ -153,6 +153,7 @@ def main():
     animated = False
     if '-show' in sys.argv:
         animated = True
+        n_particles = 2000
     if '-cm' not in sys.argv:
         center_mass_size = 5
     else:
