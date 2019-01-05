@@ -72,11 +72,85 @@ def splice_timeline(series1, series2):
     return series2
 
 
+def draw_square_lattice(state):
+    state[30:40, 110:120] = 1
+    state[30:40, 130:140] = 1
+
+    state[50:60, 90:100] = 1
+    state[50:60, 110:120] = 1
+    state[50:60, 130:140] = 1
+    state[50:60, 150:160] = 1
+
+    state[70:80, 70:80] = 1
+    state[70:80, 90:100] = 1
+    state[70:80, 110:120] = 1
+    state[70:80, 130:140] = 1
+    state[70:80, 150:160] = 1
+    state[70:80, 170:180] = 1
+
+    state[90:100, 50:60] = 1
+    state[90:100, 70:80] = 1
+    state[90:100, 90:100] = 1
+    state[90:100, 110:120] = 1
+    state[90:100, 130:140] = 1
+    state[90:100, 150:160] = 1
+    state[90:100, 170:180] = 1
+    state[90:100, 190:200] = 1
+
+    state[110:120, 30:40] = 1
+    state[110:120, 50:60] = 1
+    state[110:120, 70:80] = 1
+    state[110:120, 90:100] = 1
+    state[110:120, 110:120] = 1
+    state[110:120, 130:140] = 1
+    state[110:120, 150:160] = 1
+    state[110:120, 170:180] = 1
+    state[110:120, 190:200] = 1
+    state[110:120, 210:220] = 1
+
+    state[130:140, 30:40] = 1
+    state[130:140, 50:60] = 1
+    state[130:140, 70:80] = 1
+    state[130:140, 90:100] = 1
+    state[130:140, 110:120] = 1
+    state[130:140, 130:140] = 1
+    state[130:140, 150:160] = 1
+    state[130:140, 170:180] = 1
+    state[130:140, 190:200] = 1
+    state[130:140, 210:220] = 1
+
+    state[150:160, 50:60] = 1
+    state[150:160, 70:80] = 1
+    state[150:160, 90:100] = 1
+    state[150:160, 110:120] = 1
+    state[150:160, 130:140] = 1
+    state[150:160, 150:160] = 1
+    state[150:160, 170:180] = 1
+    state[150:160, 190:200] = 1
+
+    state[170:180, 70:80] = 1
+    state[170:180, 90:100] = 1
+    state[170:180, 110:120] = 1
+    state[170:180, 130:140] = 1
+    state[170:180, 150:160] = 1
+    state[170:180, 170:180] = 1
+
+    state[190:200, 90:100] = 1
+    state[190:200, 110:120] = 1
+    state[190:200, 130:140] = 1
+    state[190:200, 150:160] = 1
+
+    state[210:220, 110:120] = 1
+    state[210:220, 130:140] = 1
+    return state
+
+
 def main():
-    n_steps = 220
-    n_particles = 1800
-    dimensions = [250, 250]
-    checker = True
+    n_steps = 150
+    n_particles = 15500
+    dimensions = [240, 240]
+    checker = False
+    animated = False
     if '-cm' not in sys.argv:
         center_mass_size = 5
     else:
@@ -90,47 +164,11 @@ def main():
     center_x = int(state.shape[0]) / 2
     center_y = int(state.shape[1]) / 2
 
-    if checker:
-        state[90:100, 50:60] = 1
-        state[90:100, 70:80] = 1
-        state[90:100, 90:100] = 1
-        state[90:100, 110:120] = 1
-        state[90:100, 130:140] = 1
-        state[90:100, 150:160] = 1
-        state[90:100, 170:180] = 1
-        state[90:100, 190:200] = 1
+    if checker or '-cm' in sys.argv:
 
-        state[110:120, 30:40] = 1
-        state[110:120,50:60] = 1
-        state[110:120,70:80] = 1
-        state[110:120,90:100] = 1
-        state[110:120, 110:120] = 1
-        state[110:120, 130:140] = 1
-        state[110:120, 150:160] = 1
-        state[110:120, 170:180] = 1
-        state[110:120, 190:200] = 1
-        state[110:120, 210:220] = 1
+        state = draw_square_lattice(state)
 
-        state[130:140, 30:40] = 1
-        state[130:140, 50:60] = 1
-        state[130:140, 70:80] = 1
-        state[130:140, 90:100] = 1
-        state[130:140, 110:120] = 1
-        state[130:140, 130:140] = 1
-        state[130:140, 150:160] = 1
-        state[130:140, 170:180] = 1
-        state[130:140, 190:200] = 1
-        state[130:140, 210:220] = 1
-
-        state[150:160, 50:60] = 1
-        state[150:160, 70:80] = 1
-        state[150:160, 90:100] = 1
-        state[150:160, 110:120] = 1
-        state[150:160, 130:140] = 1
-        state[150:160, 150:160] = 1
-        state[150:160, 170:180] = 1
-        state[150:160, 190:200] = 1
-    else:
+    elif not checker:
         # Put a box in the center
         state[center_x - center_mass_size:center_x + center_mass_size,
               center_y - center_mass_size:center_y + center_mass_size] = 1
@@ -138,7 +176,7 @@ def main():
     data = []
 
     for particle in range(n_particles):
-        start = create_start(10, np.zeros(dimensions), False)
+        start = create_start(10, np.zeros((dimensions[0],dimensions[1])), False)
         steps = np.random.randint(1, 9, n_steps)
 
         # print "Starting from "+str(start)
@@ -147,9 +185,15 @@ def main():
         state = frames.pop()
         data.append(np.array(state))
 
-    print "Simulation completed. Rendering " + str(len(data)) + " Frames"
-    utility.ImageProcessing.render(data, False, 15, False, '')
-
+    print "Simulation completed."
+    if animated:
+        print "Rendering " + str(len(data)) + " Frames"
+        utility.ImageProcessing.render(data, False, 5, False, '')
+    else:
+        import matplotlib.pyplot as plt
+        plt.title('Final State [Generation '+str(n_particles)+']')
+        plt.imshow(state, 'gray_r')
+        plt.show()
 
 if __name__ == '__main__':
     main()
