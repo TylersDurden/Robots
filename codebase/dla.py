@@ -6,6 +6,8 @@ class walker:
     steps = []
     position = []
     state = [[]]
+    DATA = []
+    END = {}
     depth = 0
     # Numbering scheme for direction keys
     # [[1,2,3],
@@ -25,42 +27,67 @@ class walker:
         self.position = startingPos
         self.depth = steps
         self.state = initial_state
-        self.random_walk(self.generate_random_steps())
+        self.DATA, self.END = self.random_walk(self.generate_random_steps())
 
     def generate_random_steps(self):
-        rsteps = np.random.randint(1, 10, self.depth)
+        rsteps = np.random.randint(3, 10, self.depth)
         steps = list()
         for step in rsteps:
             steps.append(self.directions[step])
         return steps
 
     def random_walk(self, step_keys):
-        f = plt.figure()
+        self.state[int(self.position[0]), int(self.position[1])] = 0
         CenterBox = [int(self.state.shape[0]/2), int(self.state.shape[1]/2)]
-
-        cardinal = {'u_left': [self.position[0] - 1, self.position[1] - 1],
-                    'up': [self.position[0], self.position[1] - 1],
-                    'u_right': [self.position[0] + 1, self.position[1] - 1],
-                    'left': [self.position[0] - 1, self.position[1]],
-                    'self': [self.position[0], self.position[1]],
-                    'right': [self.position[0] + 1, self.position[1]],
-                    'd_left': [self.position[0] - 1, self.position[1] + 1],
-                    'down': [self.position[0], self.position[1] - 1],
-                    'd_right': [self.position[0] + 1, self.position[1] + 1]}
+        END_PT = {}
+        #f = plt.figure()
         history = []
         visual = []
         for step in step_keys:
-            self.state[self.position[0], self.position[1]] = 0
-            card = cardinal[step]
-            if abs(card[0]-self.position[0])<2 and abs(card[1]-self.position[1])<2:
-                self.state[self.position] = 1
-                print " ** Collision at " + str(self.position)+" **"
+            # if self.position[0] < self.state.shape[0] and self.position[0]<=0:
+            #     self.state[0, int(self.position[1])] = 1
+            # if self.position[1] < self.state.shape[1] and self.position[1]<=0:
+            #     self.state[int(self.position[0]), 0] = 1
+            history.append(self.state)
+            if step == 'u_left':
+                self.position[0]-=1
+                self.position[1]-=1
+                #continue
+            if step == 'up':
+                self.position[1]-=1
+                #continue
+            if step =='u_right':
+                self.position[0]+=1
+                self.position[1]-=1
+                #continue
+            if step == 'left':
+                self.position[0]-=1
+            if step == 'self':
+                continue
+            if step == 'right':
+                self.position[0]+=1
+
+            if step == 'd_left':
+                self.position[0]-=1
+                self.position[1]+=1
+
+            if step == 'down':
+                self.position[1]-=1
+
+            if step == 'd_right':
+                self.position[0]+=1
+                self.position[1]+=1
+
+            visual.append([plt.imshow(self.state,'gray_r')])
+            try:
+                if self.state[self.position[0],self.position[1]] == 1:
+                    break
+                self.state[int(self.position[0]), int(self.position[1])] = 1
+            except IndexError:
+                print "Out of Bounds!" + str(self.position)
+                END_PT[step] = self.position
                 break
-            else:
-                self.position = np.array([card[0], card[1]])
-                history.append(self.position)
-                self.state[card[0], card[1]] = 1
-        return history
+        return history, END_PT
 
 
 class randomlyDiffuse:
@@ -87,20 +114,38 @@ class randomlyDiffuse:
         width = 3
         self.state[center_x-width:center_x+width,
                    center_y-width:center_y+width] = 1
+        particle = 0
+        final = np.zeros((int(self.dimensions[0]*1.25),
+                          int(self.dimensions[1]*1.25)))
+        film = []
+        while particle < self.depth:
+            p = self.add_walker()
+            film = self.merge_history(p.DATA,film)
+            self.state = p.DATA.pop()
+            particle += 1
+        f = plt.figure()
+        a = animation.ArtistAnimation(f,film,interval=10,blit=True,repeat_delay=900)
+        plt.title(str(len(film))+' steps total')
 
-        self.add_walker()
+        print "Simulation Finished! Beginning Rendering Process."
+        plt.show()
+
+    def merge_history(self, dataA, dataB):
+        for obj in dataA:
+            dataB.append([plt.imshow(obj,'gray_r')])
+        return dataB
 
     def add_walker(self):
-        start = np.array([np.random.randint(0, self.state.shape[0], 1),
-                          np.random.randint(0, self.state.shape[1], 1)])
-        print "starting at "+str(start)
-        walker(start, self.state, self.nsteps)
-
+        start = np.array([np.random.randint(0+20, self.state.shape[0]-20, 1),
+                          np.random.randint(0+20, self.state.shape[1]-20, 1)])
+        print "starting at ["+str(start[0])+','+str(start[1])+"]"
+        w = walker(start, self.state, self.nsteps)
+        return w
 
 
 def main():
 
-    randomlyDiffuse(10, 50, [50, 50])
+    randomlyDiffuse(50, 100, [100, 100])
 
 
 if __name__ == '__main__':
