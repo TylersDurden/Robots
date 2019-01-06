@@ -36,6 +36,13 @@ more particles and step combinations are added.
 
 ![10KDLA](https://raw.githubusercontent.com/TylersDurden/Robots/master/10kDLA.png)
 
+Here's a little screenshot demonstrating how much better the computation time scales for the diffusion limited
+aggregation simulation when the random walk motion of particles is not only pre computed but rendered/simulated in
+parallel, instead of sequentially like dla2.py 
+
+![sdla_runtime](https://raw.githubusercontent.com/TylersDurden/Robots/master/computation_time.png)
+
+
 Running points synchronously means less accumulate in the void from clouds of other dead points, and
 hopefully because the programs computation scales better, we should be able to actually *see* the growth
 of structures in a reasonable computation time with many more total points used. 
