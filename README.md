@@ -54,4 +54,8 @@ This little program is really a testament to what you can do with one or two hun
 By designing the random walk to increment the pixels in it's path, and then having the automata eat up 
 dense pixels spots, you can get a pretty wide variety of interesting results with only a little bit of code. 
 
+![brownian automata](https://raw.githubusercontent.com/TylersDurden/Robots/master/lifeform.png)
+
+Video of simple example:
+
 ![complex motion](https://raw.githubusercontent.com/TylersDurden/Robots/master/amoeba.mp4)
