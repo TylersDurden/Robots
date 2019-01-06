@@ -1,5 +1,5 @@
 import numpy as np, matplotlib.pyplot as plt, matplotlib.animation as animation
-import sys, scipy.ndimage as ndi, utility
+import sys, scipy.ndimage as ndi, utility, time
 
 
 class complex_movements:
@@ -56,7 +56,7 @@ class complex_movements:
         automata_baselines = {'f0': [9, 6, 3, 1],
                               'f1': [15, 11, 8, 4],
                               'f2': [23, 16, 11, 8]}
-
+        t0 = time.time()
         for frame in range(self.length):
             random_steps = np.random.random_integers(1,9,n_random)
             # Add random steps to simulation matrix
@@ -78,17 +78,20 @@ class complex_movements:
                 except IndexError:
                     continue
             # Add conv/automata to simulation matrix
-            world = ndi.convolve(self.state, f0)
+            world = ndi.convolve(self.state, f1)
             flat_state = self.state.flatten()
             II = 0
             for cell in world.flatten():
-                for keynum in automata_baselines['f0']:
+                for keynum in automata_baselines['f1']:
                     if cell == keynum:
                         flat_state[II] -= 1
+                    if cell >= keynum:
+                        flat_state[II] -= 2
                 II += 1
             self.state = flat_state.reshape(self.width, self.height)
             simulation.append(world)
             visual.append([plt.imshow(self.state, 'gray_r')])
+        print "Finished Simulation ["+str(II)+" Frames in "+str(time.time() - t0)+'s'
         a = animation.ArtistAnimation(plt.figure(), visual, interval=1, blit=True, repeat_delay=800)
         # plt.imshow(world)
         plt.show()
