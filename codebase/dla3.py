@@ -78,7 +78,7 @@ class RandomWalker:
         print str(len(simulation)) + " Frames in simulation"
         if show:
             f = plt.figure(figsize=(8,8))
-            a = animation.ArtistAnimation(f,visual,interval=10,blit=True,repeat_delay=800)
+            a = animation.ArtistAnimation(f,visual,interval=20,blit=True,repeat_delay=800)
             plt.show()
 
         return simulation
@@ -160,7 +160,7 @@ def draw_square_lattice(state):
 def main():
 
     default_dims = [250, 250]
-    n_particles = 12000
+    n_particles = 17500
     n_steps = 260
     verbose = False
     if '-v' in sys.argv:
@@ -188,11 +188,11 @@ def main():
     for n_particles in range(n_particles+1):
         pt = RandomWalker(create_start(0, state, False), n_steps)
         point_cloud[n_particles] = pt.random_walk
+    t1 = time.time() - start
 
     if verbose:
         print "Finished Pre computing "+str(n_steps)+" steps For all "+str(n_particles)+' Particles.'
         print str(len(pt.random_walk)*n_particles)+" Steps Total"
-        t1 = time.time()-start
         print '[Computation Time: '+str(t1)+' s]\n'
 
     simulation = pt.run_synchronous_dla(point_cloud, state, verbose)
