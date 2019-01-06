@@ -15,7 +15,7 @@ process occur with over 5000+ points given 150 random steps each. In this simula
 die in place and remain on screen if they complete all 150 steps without hitting anything or going off
 screen. 
 
-![dlaExample1](https://raw.githubusercontent.com/TylersDurden/Robots/Images/master/Lattice.png)
+![dlaExample1](https://raw.githubusercontent.com/TylersDurden/Robots/master/Images/Lattice.png)
 
 A second example with a different initial condition [5500 Points]: 
 
@@ -23,7 +23,7 @@ A second example with a different initial condition [5500 Points]:
 
 A video example of the process occuring [2200 Points]: 
 
-[dlaExVid](https://raw.githubusercontent.com/TylersDurden/Robots/Videos/master/dlaEx.mp4)
+[dlaExVid](https://raw.githubusercontent.com/TylersDurden/Robots/master/Videos/dlaEx.mp4)
 
 In dla2.py, particles are added on-screen sequentially (though their movements are precomputed 
 offscreen for improved performance), greatly adding to the length of frames in the simulation (each particle added is captured in a frame, i.e. 5000 particles means 5000 frames). 
@@ -34,28 +34,28 @@ includes this new scheme.
 dla3 turns out to be significantly faster as well, considering how many
 more particles and step combinations are added. 
 
-![10KDLA](https://raw.githubusercontent.com/TylersDurden/Robots/Images/master/10kDLA.png)
+![10KDLA](https://raw.githubusercontent.com/TylersDurden/Robots/master/Images/10kDLA.png)
 
 Here's a little screenshot demonstrating how much better the computation time scales for the diffusion limited
 aggregation simulation when the random walk motion of particles is not only pre computed but rendered/simulated in
 parallel, instead of sequentially like dla2.py 
 
-![sdla_runtime](https://raw.githubusercontent.com/TylersDurden/Robots/Images/master/computation_time.png)
+![sdla_runtime](https://raw.githubusercontent.com/TylersDurden/Robots/master/Images/computation_time.png)
 
 
 Running points synchronously means less accumulate in the void from clouds of other dead points, and
 hopefully because the programs computation scales better, we should be able to actually *see* the growth
 of structures in a reasonable computation time with many more total points used. 
 
-![SDLA](https://raw.githubusercontent.com/TylersDurden/Robots/Videos/master/synchronized_dla.mp4)
+![SDLA](https://raw.githubusercontent.com/TylersDurden/Robots/master/Videos/synchronized_dla.mp4)
 
 # Random Walk + Automata = Woah
 This little program is really a testament to what you can do with one or two hundred lines of python code.
 By designing the random walk to increment the pixels in it's path, and then having the automata eat up 
 dense pixels spots, you can get a pretty wide variety of interesting results with only a little bit of code. 
 
-![brownian automata](https://raw.githubusercontent.com/TylersDurden/Robots/Images/master/lifeform.png)
+![brownian automata](https://raw.githubusercontent.com/TylersDurden/Robots/master/Images/lifeform.png)
 
 Video of simple example:
 
-![complex motion](https://raw.githubusercontent.com/TylersDurden/Robots/Videos/master/amoeba.mp4)
+![complex motion](https://raw.githubusercontent.com/TylersDurden/Robots/master/Videos/amoeba.mp4)
