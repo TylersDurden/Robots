@@ -100,7 +100,7 @@ class Agent:
             II += 1
         plt.show()
 
-    def generate_random_steps(self, n_steps):
+    def generate_random_steps(self, n_steps, injector):
         pos = self.position
         raw_steps = np.random.randint(1, 9, n_steps)
         valid = list()
@@ -137,7 +137,7 @@ class Agent:
         if self.debug:
             f = plt.figure()
             film = []
-
+        ii = 0
         for step in steps:
             self.position = step
             if self.state[step[0],step[1]] == 1:
@@ -145,10 +145,44 @@ class Agent:
             else:
                 self.state[step[0], step[1]] += 1
             film.append([plt.imshow(self.state, 'gray_r')])
+            try:
+                if truth.pop(ii):
+                    self.state[self.position[0], self.position[1]] *= self.state[self.position[0], self.position[1]]
+            except IndexError:
+                pass
             # self.state[self.position[0], self.position[1]] = 0
+            ii += 1
         if self.debug:
             a = animation.ArtistAnimation(f,film,interval=2,blit=True,repeat_delay=900)
             plt.show()
+
+
+def find_most_legal_sequence(legality, locations, verbose):
+    positions = []
+    n_steps = {}
+    max_steps = 0
+    n = 0
+    path_num = 0
+    ii = 0
+    for step in legality:
+        try:
+            if step:
+                positions.append(locations.pop(ii))
+            else:
+                n_steps[path_num] = positions
+                positions = []
+                path_num += 1
+            if len(positions) > n:
+                n = len(positions)
+                max_steps = path_num
+        except IndexError:
+            break
+        ii += 1
+    if verbose:
+        print str(len(n_steps)) + " Pathways"
+        print 'Best Path found: Path ' + str(max_steps)
+        print "Path " + str(max_steps) + ' is ' + str(len(n_steps[max_steps])) + ' steps'
+    return n_steps, max_steps
 
 
 def main():
@@ -166,8 +200,10 @@ def main():
         print "Starting @ "+str(start_pt[0])+','+str(start_pt[1])
         # bot.view(bot.state)
 
-    good, level1 = bot.generate_random_steps(N*10)
+    good, level1 = bot.generate_random_steps(N*10, [])
+    find_most_legal_sequence(good, level1)
     bot.test_path(good, level1)
+
 
 if __name__ == '__main__':
     main()
