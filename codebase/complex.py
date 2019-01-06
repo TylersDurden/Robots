@@ -1,5 +1,6 @@
 import numpy as np, matplotlib.pyplot as plt, matplotlib.animation as animation
-import sys, scipy.ndimage as ndi
+import sys, scipy.ndimage as ndi, utility
+
 
 class complex_movements:
 
@@ -16,11 +17,11 @@ class complex_movements:
         self.state = world
         self.mix = ratio
         self.length = duration
-        width = dims[0]
-        height = dims[1]
+        self.width = dims[0]
+        self.height = dims[1]
 
-        self.state = self.make_box(width, height)
-
+        self.state = self.make_box(dims[0], dims[1])
+        self.state = draw_square_lattice(self.state)
         nrw, nau = self.initialize()
         self.simulate(n_random=nrw, n_auto=nau)
 
@@ -40,8 +41,8 @@ class complex_movements:
         n_random = int(float(self.mix[0])/denom*self.length)
         n_auto = int(float(self.mix[1])/denom*self.length)
 
-        print str(n_auto)+' Frames of Automata and ' +\
-              str(n_random)+' Frames of Random Walking'
+        print str(n_auto)+'% Frames of Automata and ' +\
+              str(n_random)+'% Frames of Random Walking'
 
         return n_random, n_auto
 
@@ -78,19 +79,100 @@ class complex_movements:
                     continue
             # Add conv/automata to simulation matrix
             world = ndi.convolve(self.state, f0)
+            flat_state = self.state.flatten()
+            II = 0
+            for cell in world.flatten():
+                for keynum in automata_baselines['f0']:
+                    if cell == keynum:
+                        flat_state[II] -= 1
+                II += 1
+            self.state = flat_state.reshape(self.width, self.height)
             simulation.append(world)
-            visual.append([plt.imshow(world, 'gray_r')])
-        a = animation.ArtistAnimation(plt.figure(), visual, interval=20,blit=True,repeat_delay=800)
+            visual.append([plt.imshow(self.state, 'gray_r')])
+        a = animation.ArtistAnimation(plt.figure(), visual, interval=1, blit=True, repeat_delay=800)
         # plt.imshow(world)
         plt.show()
         return simulation
 
 
+def draw_square_lattice(state):
+    state[30:40, 110:120] = 1
+    state[30:40, 130:140] = 1
+
+    state[50:60, 90:100] = 1
+    state[50:60, 110:120] = 1
+    state[50:60, 130:140] = 1
+    state[50:60, 150:160] = 1
+
+    state[70:80, 70:80] = 1
+    state[70:80, 90:100] = 1
+    state[70:80, 110:120] = 1
+    state[70:80, 130:140] = 1
+    state[70:80, 150:160] = 1
+    state[70:80, 170:180] = 1
+
+    state[90:100, 50:60] = 1
+    state[90:100, 70:80] = 1
+    state[90:100, 90:100] = 1
+    state[90:100, 110:120] = 1
+    state[90:100, 130:140] = 1
+    state[90:100, 150:160] = 1
+    state[90:100, 170:180] = 1
+    state[90:100, 190:200] = 1
+
+    state[110:120, 30:40] = 1
+    state[110:120, 50:60] = 1
+    state[110:120, 70:80] = 1
+    state[110:120, 90:100] = 1
+    state[110:120, 110:120] = 1
+    state[110:120, 130:140] = 1
+    state[110:120, 150:160] = 1
+    state[110:120, 170:180] = 1
+    state[110:120, 190:200] = 1
+    state[110:120, 210:220] = 1
+
+    state[130:140, 30:40] = 1
+    state[130:140, 50:60] = 1
+    state[130:140, 70:80] = 1
+    state[130:140, 90:100] = 1
+    state[130:140, 110:120] = 1
+    state[130:140, 130:140] = 1
+    state[130:140, 150:160] = 1
+    state[130:140, 170:180] = 1
+    state[130:140, 190:200] = 1
+    state[130:140, 210:220] = 1
+
+    state[150:160, 50:60] = 1
+    state[150:160, 70:80] = 1
+    state[150:160, 90:100] = 1
+    state[150:160, 110:120] = 1
+    state[150:160, 130:140] = 1
+    state[150:160, 150:160] = 1
+    state[150:160, 170:180] = 1
+    state[150:160, 190:200] = 1
+
+    state[170:180, 70:80] = 1
+    state[170:180, 90:100] = 1
+    state[170:180, 110:120] = 1
+    state[170:180, 130:140] = 1
+    state[170:180, 150:160] = 1
+    state[170:180, 170:180] = 1
+
+    state[190:200, 90:100] = 1
+    state[190:200, 110:120] = 1
+    state[190:200, 130:140] = 1
+    state[190:200, 150:160] = 1
+
+    state[210:220, 110:120] = 1
+    state[210:220, 130:140] = 1
+    return state
+
+
 def main():
     # Global settings
     N = 250
-    walk_ratio = 3
-    auto_ratio = 2
+    walk_ratio = 2
+    auto_ratio = 4
 
     # User selection for canvas dimensions
     if '-dims' in sys.argv:

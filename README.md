@@ -49,3 +49,9 @@ of structures in a reasonable computation time with many more total points used.
 
 ![SDLA](https://raw.githubusercontent.com/TylersDurden/Robots/master/synchronized_dla.mp4)
 
+# Random Walk + Automata = Woah
+This little program is really a testament to what you can do with one or two hundred lines of python code.
+By designing the random walk to increment the pixels in it's path, and then having the automata eat up 
+dense pixels spots, you can get a pretty wide variety of interesting results with only a little bit of code. 
+
+![complex motion](https://raw.githubusercontent.com/TylersDurden/Robots/master/amoeba.mp4)
