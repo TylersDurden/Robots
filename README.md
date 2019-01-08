@@ -2,10 +2,10 @@
 Try out ``python imageine.py box random_walk``
 and watch a random walk, using N Steps (you get to choose how many). 
 
-![Example Output](https://raw.githubusercontent.com/TylersDurden/Robots/Images/master/RandomWalkEx.png)
+![Example Output](https://raw.githubusercontent.com/TylersDurden/Robots/master/ImagesRandomWalkEx.png)
 
 A video showing what a random walk looks like:
-[Random Walking](https://raw.githubusercontent.com/TylersDurden/Robots/Videos/master/random_walking.mp4)
+[Random Walking](https://raw.githubusercontent.com/TylersDurden/Robots/master/Vidoes/random_walking.mp4)
 
 
 # Diffusion-Limited Aggregation
