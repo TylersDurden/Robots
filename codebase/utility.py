@@ -114,6 +114,13 @@ def console_color_printing(line, color, bold, italic):
     return line_out
 
 
+def spawn_random_point(state):
+    # Initialize a random position
+    x = np.random.randint(0, state.shape[0], 1, dtype=int)
+    y = np.random.randint(0, state.shape[1], 1, dtype=int)
+    return [x, y]
+
+
 class ImageProcessing:
 
     @staticmethod
@@ -163,4 +170,18 @@ class ImageProcessing:
             writer = FFMpegWriter(fps=frame_rate, metadata=dict(artist='Me'), bitrate=1800)
             a.save(fileNameOut, writer=writer)
         plt.show()
+
+
+class Console:
+    END = '\33[0m'
+    RED = '\33[31m'
+    GRN = '\33[92m'
+    BLU = '\33[34m'
+    PRP = '\33[35m'
+    BRN = '\33[46m'
+    WBG = '\33[7m'
+    RBG = '\33[41m'
+    BLD = '\33[1m'
+    ITA = '\33[3m'
+
 

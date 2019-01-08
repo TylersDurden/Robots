@@ -25,7 +25,7 @@ class complex_movements:
         nrw, nau = self.initialize()
         self.simulate(n_random=nrw, n_auto=nau)
         if 'swarm' in opts:
-            self.simulate_swarm(5, nrw)
+            self.simulate_swarm(15, nrw)
 
     def make_box(self, width,height):
         center_x = width / 2
