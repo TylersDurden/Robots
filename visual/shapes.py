@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt, matplotlib.animation as animation
 from matplotlib.animation import FFMpegWriter
-import numpy as np, scipy.ndimage as ndi
+import resource, numpy as np, scipy.ndimage as ndi
 
 
 def centered_box(dims, box_sz, preview):
@@ -44,4 +44,54 @@ def render(images, isColor, frame_rate, save, fileNameOut):
         a.save(fileNameOut, writer=writer)
     plt.show()
 
+
+def check_mem_usage():
+    """
+    Return the amount of RAM usage, in bytes, being consumed currently.
+    :return (integer) memory used in bytes:
+    """
+    mem = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    return mem
+
+
+def create_square_lattice(box_sz, dims, layout, show):
+    """
+    Create a grid of square boxes with the given layout
+    I.E [4x4] yields a grid of 4 boxes by 4 boxes.
+    :param box_sz:
+    :param dims:
+    :param layout:
+    :param show:
+    :return state:
+    """
+    state = np.zeros(dims)
+    nr = state.shape[0] / layout[0]
+    nc = state.shape[1] / layout[1]
+
+    row_size = np.arange(2 * box_sz, state.shape[0] + 2 * box_sz, nr)
+    col_size = np.arange(2 * box_sz, state.shape[1] + 2 * box_sz, nc)
+
+    for i in row_size:
+        for j in col_size:
+            state[i - box_sz:i + box_sz, j - box_sz:j + box_sz] = 1
+    if show:
+        plt.imshow(state, 'gray_r')
+        plt.show()
+    return state
+
+
+def preview_figures(plot_dic):
+    """
+    Preview images stored in a dict with the key as
+    the title, and the value of that key being images
+    :param plot_dic:
+    :return:
+    """
+    f, ax = plt.subplots(1, len(plot_dic.keys()))
+    plot = 0
+    for shape in plot_dic.keys():
+        ax[plot].imshow(plot_dic[shape], 'gray_r')
+        ax[plot].set_title(shape)
+        plot += 1
+    plt.show()
 
