@@ -33,7 +33,7 @@ class StepSpark:
         for step in raw_steps:
             possible_steps = []
             seed = np.random.randint(0, 9, depth).flatten()
-            for thought in np.random.randint(0, 9, depth):
+            for thought in np.unique(seed):
                 possible_steps.append(thought)
             # Take Random Step
             self.random_steps.append(step)
